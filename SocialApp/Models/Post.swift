@@ -7,11 +7,10 @@
 
 import Foundation
 
-struct Post {
+struct Post : Encodable{
     let id: String
     let title : String
     let timestamp : TimeInterval
-    let imageUrl : URL?
-    let descreption : String
+    let imageUrls : [URL?]
     let like : Int
 }

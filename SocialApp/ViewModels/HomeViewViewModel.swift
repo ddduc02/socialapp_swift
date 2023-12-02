@@ -8,8 +8,10 @@
 import Foundation
 
 class HomeViewViewModel : ObservableObject {
-    
+    @Published var newPostShow = false
     init() {
         
     }
+    
+    
 }
