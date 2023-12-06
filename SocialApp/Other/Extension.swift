@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 extension Encodable {
     func asDictionary() -> [String : Any] {
@@ -20,5 +21,16 @@ extension Encodable {
             return [:]
         }
         
+    }
+}
+extension URL {
+    func loadImage() ->UIImage {
+        do {
+            let data : Data =  try Data(contentsOf: self)
+            return UIImage(data: data) ?? UIImage()
+        } catch {
+            
+        }
+        return UIImage()
     }
 }

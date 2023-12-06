@@ -35,7 +35,6 @@ struct NewPostView: View {
                     .textFieldStyle(PlainTextFieldStyle())
                     .autocorrectionDisabled()
                     .autocapitalization(.none)
-                    .padding()
                     .frame(height: 200)
                 
                 if(viewModel.photos.count > 0) {
@@ -49,7 +48,6 @@ struct NewPostView: View {
                                     .clipShape(RoundedRectangle(cornerRadius: 16))
                             }
                         }
-                        .padding()
                     }
                     PhotosPicker("Choose your images", selection: $photosPickerItem, selectionBehavior: .ordered, matching: .images)
                 } else {

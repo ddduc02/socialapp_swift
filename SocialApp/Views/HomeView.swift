@@ -11,61 +11,51 @@ import FirebaseStorage
 
 struct HomeView: View {
     public let userId : String
-    @StateObject var viewModel = HomeViewViewModel()
+    @StateObject var viewModel : HomeViewViewModel
     init(userId : String) {
         self.userId = userId
-        let db = Firestore.firestore()
-        let usersCollection = db.collection("users")
-
-        usersCollection.getDocuments { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error.localizedDescription)")
-            } else {
-                guard let documents = querySnapshot?.documents else { return }
-
-                let userIds = documents.compactMap { $0.documentID }
-                // userIds chứa tất cả các userId từ collection "users"
-                print(userIds)
-            }
-        }
+        self._viewModel = StateObject(wrappedValue: HomeViewViewModel())
     }
     var body: some View {
         NavigationView {
-            VStack{
-                HStack(alignment: .top) {
-                    Image(systemName: "person.circle.fill")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .padding(.vertical, 12)
-                        .padding(.horizontal)
-                    
-                    
-                    Text("What's on your mind? Click here!")
-                        .padding(.all)
-                        .foregroundColor(.gray)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray, lineWidth: 1)
-                        )
-                        .frame(width: .infinity)
-                        .onTapGesture {
-                            viewModel.newPostShow = true
-                        }
-                    
+            ScrollView {
+                VStack{
+                    HStack(alignment: .top) {
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .padding(.vertical, 12)
+                        
+                        Text("What's on your mind? Click here!")
+                            .padding(.all)
+                            .foregroundColor(.gray)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .stroke(Color.gray, lineWidth: 1)
+                            )
+                            .frame(width: .infinity)
+                            .onTapGesture {
+                                viewModel.newPostShow = true
+                            }
+                        
+                        Spacer()
+                    }
+                    Text("Home page")
+                    ForEach(viewModel.listPosts){ post in
+                        PostView(post: post)
+                            .padding(.bottom, 10)
+                        
+                    }
                     Spacer()
                 }
-                .padding(.all)
-                Text("Home page")
-                Spacer()
-            }
-            .navigationTitle("Home")
-            .sheet(isPresented: $viewModel.newPostShow) {
-                NewPostView(postImages: [], 
-                    newPostShow: $viewModel.newPostShow)
+                .navigationTitle("Home")
+                .sheet(isPresented: $viewModel.newPostShow) {
+                    NewPostView(postImages: [],
+                                newPostShow: $viewModel.newPostShow)
+                }
             }
         }
-        .onAppear()
-        
+        .padding()
     }
 }
 

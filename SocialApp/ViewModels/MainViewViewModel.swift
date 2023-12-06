@@ -14,6 +14,7 @@ class MainViewViewModel : ObservableObject {
     
     init() {
         self.handler = Auth.auth().addStateDidChangeListener({ _, user in
+            // thực hiện việc set uid trên luồng chính, và khi có sự thay đổi về currentUserId thì UI sẽ render lại
             DispatchQueue.main.async {
                 self.currentUserId = user?.uid ?? ""
             }
@@ -23,4 +24,6 @@ class MainViewViewModel : ObservableObject {
     func isSignIn() -> Bool {
         return Auth.auth().currentUser?.uid != nil
     }
+    
+    
 }

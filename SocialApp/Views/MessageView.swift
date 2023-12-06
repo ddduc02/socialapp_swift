@@ -11,7 +11,7 @@ struct MessageView: View {
     var body: some View {
         NavigationView {
             VStack{
-                Text("Message page")
+                Text("This feature is under development")
             }
             .navigationTitle("Message")
         }
