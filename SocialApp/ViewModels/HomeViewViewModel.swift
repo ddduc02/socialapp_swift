@@ -13,6 +13,7 @@ class HomeViewViewModel : ObservableObject {
     @Published var newPostShow = false
     @Published var listPosts : [UserWithPost] = []
     var listUserIdWithPosts : [String] = []
+
     init() {
         self.getUserIdsWithPosts()
     }
@@ -53,6 +54,7 @@ class HomeViewViewModel : ObservableObject {
                 }
             }
             dispatchGroup.notify(queue: .main) {
+                print("Done get userid")
                 self.getUserWithPosts()
             }
         }
@@ -66,7 +68,6 @@ class HomeViewViewModel : ObservableObject {
         
         for userId in listUserIdWithPosts {
             dispatchGroup.enter()
-            
             let userCollection = db.collection("users").document(userId)
             userCollection.getDocument { [weak self] (document, error) in
                 guard let self = self else { return }
@@ -80,7 +81,6 @@ class HomeViewViewModel : ObservableObject {
                 if let document = document, document.exists {
                     let userData = document.data() // Thông tin của người dùng dưới dạng Dictionary
                     print("Thông tin người dùng với userID \(userId): \(userData)")
-                    
                     userCollection.collection("posts").getDocuments { postSnapshot, _ in
                         defer {
                             dispatchGroup.leave()
@@ -89,15 +89,9 @@ class HomeViewViewModel : ObservableObject {
                         if let postDocuments = postSnapshot?.documents {
                             for postDocument in postDocuments {
                                 let postData = postDocument.data()
-                                if let imageUrlsStrings = postData["imageUrls"] as? [String] {
-                                    let urls = imageUrlsStrings.compactMap {
-                                        URL(string: $0)
-                                        
-                                    }
-                                    
-                                    let userWithPost = UserWithPost(userId: userData!["id"] as! String, name: userData?["name"] as! String, userImageUrls: nil, postId: postData["id"] as! String, title: postData["title"] as! String, timestamp: postData["timestamp"] as! TimeInterval, imageUrls: urls, like: postData["like"] as! Int)
-                                    self.listPosts.append(userWithPost)
-                                }
+                                print("check postid from home \(postData["id"])")
+                                let userWithPost = UserWithPost(userId: userData!["id"] as! String, name: userData?["name"] as! String, userImageUrls: nil, postId: postData["id"] as! String, title: postData["title"] as! String, timestamp: postData["timestamp"] as! TimeInterval, photoData: [], like: postData["like"] as! Int)
+                                self.listPosts.append(userWithPost)
                             }
                         }
                         else {
@@ -108,11 +102,13 @@ class HomeViewViewModel : ObservableObject {
                 }
                 
                 dispatchGroup.notify(queue: .main) {
+                    print("Done get user with post")
                     print("Check count \(self.listPosts.count)")
                 }
             }
             
         }
-       
+        
     }
+    
 }

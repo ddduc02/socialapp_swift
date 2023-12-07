@@ -11,6 +11,6 @@ struct Post : Encodable{
     let id: String
     let title : String
     let timestamp : TimeInterval
-    let imageUrls : [URL?]
+    let photoData : [Data]?
     let like : Int
 }

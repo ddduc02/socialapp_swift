@@ -44,6 +44,7 @@ struct HomeView: View {
                     ForEach(viewModel.listPosts){ post in
                         PostView(post: post)
                             .padding(.bottom, 10)
+                            .environmentObject(viewModel)
                         
                     }
                     Spacer()
@@ -56,6 +57,7 @@ struct HomeView: View {
             }
         }
         .padding()
+    
     }
 }
 

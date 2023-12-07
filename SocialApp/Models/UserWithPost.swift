@@ -15,6 +15,6 @@ struct UserWithPost : Identifiable {
     let postId: String
     let title : String
     let timestamp : TimeInterval
-    let imageUrls : [URL?]
+    var photoData : [Data]
     let like : Int
 }

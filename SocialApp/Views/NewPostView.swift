@@ -41,7 +41,7 @@ struct NewPostView: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 10) {
                             ForEach(0..<viewModel.photos.count, id: \.self) { i in
-                                Image(uiImage: viewModel.photos[i])
+                                Image(uiImage: viewModel.photos[i]!)
                                     .resizable()
                                     .frame(width: 350, height: 350)
                                     .aspectRatio(contentMode: .fit)

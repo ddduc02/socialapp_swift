@@ -23,14 +23,10 @@ extension Encodable {
         
     }
 }
-extension URL {
-    func loadImage() ->UIImage {
-        do {
-            let data : Data =  try Data(contentsOf: self)
-            return UIImage(data: data) ?? UIImage()
-        } catch {
-            
-        }
-        return UIImage()
+extension UIImage {
+    func changeImageResolution(scale: CGFloat) -> UIImage? {
+        let imageData = self.jpegData(compressionQuality: 1.0)
+        let imageWithNewScale = UIImage(data: imageData ?? Data(), scale: scale)
+        return imageWithNewScale
     }
 }

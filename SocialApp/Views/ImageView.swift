@@ -12,26 +12,13 @@ struct ImageView: View {
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
-            TabView{
-                ForEach(postData.post.imageUrls, id: \.self) { url in
-                    AsyncImage(url: url) { phase in
-                        switch phase {
-                        case .success(let image):
-                            image
-                                .resizable()
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                        case .failure:
-                            Text("Failed to load image")
-                        case .empty:
-                            Text("Loading...")
-                        @unknown default:
-                            Text("Error!")
-                        }
-                    }
-                      
+            TabView {
+                ForEach(postData.post.photoData, id: \.self) { photoData in
+                    Image(uiImage: UIImage(data: photoData)!)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
                 }
-               
+                
             }
             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
             .overlay(
@@ -45,10 +32,11 @@ struct ImageView: View {
                         .padding()
                         .clipShape(Circle())
                 })
-                .padding()
                 ,alignment: .topTrailing
             )
         }
+        .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        .edgesIgnoringSafeArea(.all)
     }
 }
 
